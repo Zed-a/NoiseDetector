@@ -1,4 +1,4 @@
-package com.nan.noisedetector.widget;
+package com.nan.noisedetector.ui.widget;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,7 +14,7 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.nan.noisedetector.R;
-import com.nan.noisedetector.World;
+import com.nan.noisedetector.util.DecibelUtil;
 
 public class SoundDiscView extends AppCompatImageView {
 
@@ -80,9 +80,9 @@ public class SoundDiscView extends AppCompatImageView {
         if (indicatorBitmap == null) {
             init();
         }
-        mMatrix.setRotate(getAngle(World.dbCount), newWidth / 2, newHeight * 215 / 460);   //片相对位置
+        mMatrix.setRotate(getAngle(DecibelUtil.dbCount), newWidth / 2, newHeight * 215 / 460);   //片相对位置
         canvas.drawBitmap(indicatorBitmap, mMatrix, paint);
-        canvas.drawText((int)World.dbCount+" DB", newWidth/2,newHeight*36/46, paint); //图片相对位置
+        canvas.drawText((int) DecibelUtil.dbCount+" DB", newWidth/2,newHeight*36/46, paint); //图片相对位置
     }
 
     private float getAngle(float db){

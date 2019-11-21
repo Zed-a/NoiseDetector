@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.nan.noisedetector.widget.SoundDiscView
+    <com.nan.noisedetector.ui.widget.SoundDiscView
         android:id="@+id/soundDiscView"
         android:layout_centerInParent="true"
         android:layout_width="344dp"

@@ -1,17 +1,17 @@
-package com.nan.noisedetector;
+package com.nan.noisedetector.record;
 
 import android.media.MediaRecorder;
 
 import java.io.File;
 import java.io.IOException;
 
-class MyMediaRecorder {
+public class MyMediaRecorder {
 	
 	private File myRecAudioFile ;
 	private MediaRecorder mMediaRecorder ;
 	private boolean isRecording = false ;
 	
-	float getMaxAmplitude() {
+	public float getMaxAmplitude() {
 		 if (mMediaRecorder != null) {
 			 try {
 				 return mMediaRecorder.getMaxAmplitude();
@@ -24,7 +24,7 @@ class MyMediaRecorder {
 		 }
 	}
 
-	void setMyRecAudioFile(File myRecAudioFile) {
+	public void setMyRecAudioFile(File myRecAudioFile) {
 		this.myRecAudioFile = myRecAudioFile;
 	}
 
@@ -32,7 +32,7 @@ class MyMediaRecorder {
 	 * 录音
 	 * @return 是否成功开始录音
      */
-	boolean startRecorder(){
+	public boolean startRecorder(){
 		if (myRecAudioFile == null) {
 			return false;
 		}
@@ -54,7 +54,7 @@ class MyMediaRecorder {
         	mMediaRecorder = null;
         	isRecording = false ;
 			exception.printStackTrace();
-        }catch(IllegalStateException e){
+        } catch(IllegalStateException e) {
         	stopRecording();
 			e.printStackTrace();
 			isRecording = false ;
@@ -77,7 +77,7 @@ class MyMediaRecorder {
 		}
 	}
 
-	void delete() {
+	public void delete() {
 		stopRecording();
 		if (myRecAudioFile != null) {
 			myRecAudioFile.delete();

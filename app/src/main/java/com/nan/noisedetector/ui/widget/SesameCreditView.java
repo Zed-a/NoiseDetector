@@ -1,4 +1,4 @@
-package com.nan.noisedetector.widget;
+package com.nan.noisedetector.ui.widget;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;

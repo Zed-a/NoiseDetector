@@ -1,14 +1,16 @@
-package com.nan.noisedetector;
+package com.nan.noisedetector.util;
 
+public class DecibelUtil {
 
-public class World {
-
-	public static float dbCount = 40;
+	public static float dbCount = 0;
 
 	private static float lastDbCount = dbCount;
-	private static float min = 0.5f;  //设置声音最低变化
-	private static float value = 0;   // 声音分贝值
+
 	public static void setDbCount(float dbValue) {
+		//设置声音最低变化
+		float min = 0.5f;
+		// 声音分贝值
+		float value;
 		if (dbValue > lastDbCount) {
 			value = dbValue - lastDbCount > min ? dbValue - lastDbCount : min;
 		}else{

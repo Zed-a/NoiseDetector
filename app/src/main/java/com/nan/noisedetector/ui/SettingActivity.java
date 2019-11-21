@@ -1,4 +1,4 @@
-package com.nan.noisedetector;
+package com.nan.noisedetector.ui;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+
+import com.nan.noisedetector.R;
 
 public class SettingActivity extends AppCompatActivity {
 
