@@ -18,7 +18,6 @@ import com.nan.noisedetector.util.DecibelUtil;
 
 public class SoundDiscView extends AppCompatImageView {
 
-    private float scaleWidth, scaleHeight;
     private int newWidth, newHeight;
     private Matrix mMatrix = new Matrix();
     private Bitmap indicatorBitmap;
@@ -39,8 +38,8 @@ public class SoundDiscView extends AppCompatImageView {
         int bitmapHeight = myBitmap.getHeight();
         newWidth = getWidth();
         newHeight = getHeight();
-        scaleWidth = ((float) newWidth) /(float) bitmapWidth;  // 获取缩放比例
-        scaleHeight = ((float) newHeight) /(float) bitmapHeight;  //获取缩放比例
+        float scaleWidth = ((float) newWidth) / (float) bitmapWidth;  // 获取缩放比例
+        float scaleHeight = ((float) newHeight) / (float) bitmapHeight;  //获取缩放比例
         mMatrix.postScale(scaleWidth, scaleHeight);   //设置mMatrix的缩放比例
         indicatorBitmap = Bitmap.createBitmap(myBitmap, 0, 0, bitmapWidth, bitmapHeight, mMatrix,true);  //获取同等和背景宽高的指针图的bitmap
 
@@ -80,13 +79,12 @@ public class SoundDiscView extends AppCompatImageView {
         if (indicatorBitmap == null) {
             init();
         }
-        mMatrix.setRotate(getAngle(DecibelUtil.dbCount), newWidth / 2, newHeight * 215 / 460);   //片相对位置
+        mMatrix.setRotate(getAngle(DecibelUtil.getDbCount()), newWidth >> 1, (float) newHeight * 215 / 460);   //片相对位置
         canvas.drawBitmap(indicatorBitmap, mMatrix, paint);
-        canvas.drawText((int) DecibelUtil.dbCount+" DB", newWidth/2,newHeight*36/46, paint); //图片相对位置
+        canvas.drawText((int) DecibelUtil.getDbCount()+" DB", newWidth >> 1,(float) newHeight * 36 / 46, paint); //图片相对位置
     }
 
     private float getAngle(float db){
-        return(db-85)*5/3;  //说多了都是泪，网上找的图片。。自己不会改图，代码计算下
+        return (float) ((db-81.5)*5/3);
     }
-
 }

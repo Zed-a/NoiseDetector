@@ -1,3 +1,8 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="round_radius">4dp</dimen>
+    <dimen name="btn_stroke_width">1px</dimen>
+    <dimen name="edittext_margin">20dp</dimen>
+    <dimen name="holo_common_btn_height">43dp</dimen>
+    <dimen name="holo_common_btn_textsize">16dp</dimen>
 </resources>

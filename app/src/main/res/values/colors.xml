@@ -3,4 +3,11 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="btn_disable_inside">#FF7B90A1</color>
+    <color name="btn_disable_stroke">#FF475D6E</color>
+    <color name="btn_stroke_color">#FF16a186</color>
+    <color name="btn_background_color">#FF19BC9C</color>
+    <color name="holo_btn_enable_text_color">#ffffff</color>
+    <color name="holo_btn_disable_text_color">#ffffff</color>
+    <color name="btn_holo_light_pressed">#1c7f65</color>
 </resources>

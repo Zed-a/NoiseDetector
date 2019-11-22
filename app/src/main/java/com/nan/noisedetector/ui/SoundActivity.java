@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.nan.noisedetector.R;
@@ -40,6 +41,8 @@ public class SoundActivity extends AppCompatActivity {
 
     private SoundDiscView mSoundDiscView;
     private MyMediaRecorder mRecorder;
+    private Button mBtnStartDetect;
+    private Button mBtnStopDetect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +65,19 @@ public class SoundActivity extends AppCompatActivity {
                 startActivity(new Intent(SoundActivity.this, SettingActivity.class));
             return true;
         });
-        findViewById(R.id.btn_start_detect).setOnClickListener(v -> startRecord());
-        findViewById(R.id.btn_stop_detect).setOnClickListener(v -> {
-            mRecorder.delete();
+        mBtnStartDetect = findViewById(R.id.btn_start_detect);
+        mBtnStartDetect.setOnClickListener(v -> {
+            startRecord();
+            mBtnStartDetect.setEnabled(false);
+            mBtnStopDetect.setEnabled(true);
+        });
+        mBtnStopDetect = findViewById(R.id.btn_stop_detect);
+        mBtnStopDetect.setOnClickListener(v -> {
+            stopRecord();
+            DecibelUtil.clear();
+            mSoundDiscView.refresh();
+            mBtnStartDetect.setEnabled(true);
+            mBtnStopDetect.setEnabled(false);
         });
     }
 
@@ -142,17 +155,20 @@ public class SoundActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+    private void stopRecord() {
         mRecorder.delete();
         handler.removeMessages(MSG_WHAT);
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        stopRecord();
+    }
+
+    @Override
     protected void onDestroy() {
-        handler.removeMessages(MSG_WHAT);
-        mRecorder.delete();
         super.onDestroy();
+        stopRecord();
     }
 }

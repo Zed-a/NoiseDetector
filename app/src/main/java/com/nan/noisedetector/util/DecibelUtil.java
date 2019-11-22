@@ -1,10 +1,13 @@
 package com.nan.noisedetector.util;
 
 public class DecibelUtil {
-
-	public static float dbCount = 0;
+	private static float dbCount = 0;
 
 	private static float lastDbCount = dbCount;
+
+	public static float getDbCount() {
+		return dbCount;
+	}
 
 	public static void setDbCount(float dbValue) {
 		//设置声音最低变化
@@ -18,6 +21,11 @@ public class DecibelUtil {
 		}
 		dbCount = lastDbCount + value * 0.2f ; //防止声音变化太快
 		lastDbCount = dbCount;
+	}
+
+	public static void clear() {
+		dbCount = 0;
+		lastDbCount = 0;
 	}
 	
 }

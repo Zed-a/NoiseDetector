@@ -13,20 +13,21 @@
 
     <Button
         android:id="@+id/btn_start_detect"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/HoloNewBtnStyle"
         android:layout_below="@id/soundDiscView"
         android:layout_centerHorizontal="true"
         android:text="@string/start_record"/>
 
     <Button
         android:id="@+id/btn_stop_detect"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/HoloNewBtnStyle"
+        android:layout_marginTop="30dp"
         android:layout_below="@+id/btn_start_detect"
         android:layout_centerHorizontal="true"
-        android:text="@string/stop_detect"/>
-
+        android:text="@string/stop_detect"
+        android:enabled="false"/>
 
     <include layout="@layout/toolbar"/>
 
