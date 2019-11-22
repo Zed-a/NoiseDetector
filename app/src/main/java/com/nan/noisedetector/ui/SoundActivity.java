@@ -102,7 +102,7 @@ public class SoundActivity extends AppCompatActivity {
     };
 
     private void showNotification(float dbCount) {
-        if (dbCount < mThreshold && PreferenceHelper.isOpenNotify()) {
+        if (PreferenceHelper.isOpenNotify() && dbCount < mThreshold) {
             return;
         }
         Notification.Builder builder = new Notification.Builder(SoundActivity.this);
