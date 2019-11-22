@@ -16,8 +16,12 @@
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-        <activity android:name=".ui.SettingActivity" />
-        <activity android:name=".ui.SoundActivity">
+        <activity
+            android:name=".ui.SettingActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.SoundActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
