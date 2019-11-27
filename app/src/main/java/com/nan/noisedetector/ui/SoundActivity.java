@@ -74,8 +74,6 @@ public class SoundActivity extends AppCompatActivity {
         mBtnStopDetect = findViewById(R.id.btn_stop_detect);
         mBtnStopDetect.setOnClickListener(v -> {
             stopRecord();
-            DecibelUtil.clear();
-            mSoundDiscView.refresh();
             mBtnStartDetect.setEnabled(true);
             mBtnStopDetect.setEnabled(false);
         });
@@ -158,12 +156,8 @@ public class SoundActivity extends AppCompatActivity {
     private void stopRecord() {
         mRecorder.delete();
         handler.removeMessages(MSG_WHAT);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        stopRecord();
+        DecibelUtil.clear();
+        mSoundDiscView.refresh();
     }
 
     @Override
