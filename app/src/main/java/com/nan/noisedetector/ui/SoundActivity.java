@@ -2,8 +2,11 @@ package com.nan.noisedetector.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
@@ -15,16 +18,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nan.noisedetector.R;
-import com.nan.noisedetector.record.MyMediaRecorder;
+import com.nan.noisedetector.record.NoiseMediaRecorder;
 import com.nan.noisedetector.util.DecibelUtil;
 import com.nan.noisedetector.util.FileUtil;
-import com.nan.noisedetector.ui.widget.SoundDiscView;
 import com.nan.noisedetector.util.PreferenceHelper;
 
 import java.io.File;
+import java.util.List;
 
 public class SoundActivity extends AppCompatActivity {
 
@@ -39,8 +43,9 @@ public class SoundActivity extends AppCompatActivity {
     private static final int REFRESH_TIME = 100;
     private float mThreshold;
 
-    private SoundDiscView mSoundDiscView;
-    private MyMediaRecorder mRecorder;
+//    private SoundDiscView mSoundDiscView;
+    private TextView mView;
+    private NoiseMediaRecorder mRecorder;
     private Button mBtnStartDetect;
     private Button mBtnStopDetect;
 
@@ -50,13 +55,14 @@ public class SoundActivity extends AppCompatActivity {
 //        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
 //        getWindow().setEnterTransition(new Slide(Gravity.TOP));
         setContentView(R.layout.activity_sound);
-        mRecorder = new MyMediaRecorder();
+        mRecorder = new NoiseMediaRecorder();
         initView();
         verifyPermissions();
     }
 
     private void initView() {
-        mSoundDiscView = findViewById(R.id.soundDiscView);
+//        mSoundDiscView = findViewById(R.id.soundDiscView);
+        mView = findViewById(R.id.soundDiscView);
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
         toolbar.inflateMenu(R.menu.menu_main);
@@ -90,7 +96,7 @@ public class SoundActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mThreshold = PreferenceHelper.getThreshold();
+        mThreshold = PreferenceHelper.INSTANCE.getThreshold();
     }
 
     @SuppressLint("HandlerLeak")
@@ -104,20 +110,22 @@ public class SoundActivity extends AppCompatActivity {
             float volume = mRecorder.getMaxAmplitude();  //获取声压值
             if(volume > 0 && volume < 1000000) {
                 float dbCount = 20 * (float)(Math.log10(volume));
-                showNotification(dbCount);
-                DecibelUtil.setDbCount(dbCount);  //将声压值转为分贝值
-                mSoundDiscView.refresh();
+//                showNotification(dbCount);
+                DecibelUtil.INSTANCE.setDbCount(dbCount);  //将声压值转为分贝值
+//                mSoundDiscView.refresh();
+                int count = (int) DecibelUtil.INSTANCE.getDbCount();
+                mView.setText(count+20+"");
             }
             handler.sendEmptyMessageDelayed(MSG_WHAT, REFRESH_TIME);
         }
     };
 
     private void showNotification(float dbCount) {
-        if (PreferenceHelper.isOpenNotify() && dbCount < mThreshold) {
+        if (PreferenceHelper.INSTANCE.isOpenNotify() && dbCount < mThreshold) {
             return;
         }
         Notification.Builder builder = new Notification.Builder(SoundActivity.this);
-//        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.baidu.com"));
+        Intent intent;
 //        PendingIntent pendingIntent = PendingIntent.getActivity(SoundActivity.this,0,intent,0);  //点击跳转
         builder.setSmallIcon(R.mipmap.ic_launcher)  //小图标，在大图标右下角
             .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher)) //大图标，没有设置时小图标就是大图标
@@ -153,11 +161,31 @@ public class SoundActivity extends AppCompatActivity {
         }
     }
 
+    public static int isAppAlive(Context context, String packageName) {
+        ActivityManager activityManager = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> listInfos = activityManager
+                .getRunningTasks(20);
+        // 判断程序是否在栈顶
+        if (listInfos.get(0).topActivity.getPackageName().equals(packageName)) {
+            return 1;
+        } else {
+            // 判断程序是否在栈里
+            for (ActivityManager.RunningTaskInfo info : listInfos) {
+                if (info.topActivity.getPackageName().equals(packageName)) {
+                    return 2;
+                }
+            }
+            return 0;// 栈里找不到，返回3
+        }
+    }
+
     private void stopRecord() {
         mRecorder.delete();
         handler.removeMessages(MSG_WHAT);
-        DecibelUtil.clear();
-        mSoundDiscView.refresh();
+        DecibelUtil.INSTANCE.clear();
+        mView.setText(0+"");
+//        mSoundDiscView.refresh();
     }
 
     @Override

@@ -4,18 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.nan.noisedetector.ui.widget.SoundDiscView
+    <TextView
         android:id="@+id/soundDiscView"
-        android:layout_centerInParent="true"
-        android:layout_width="344dp"
-        android:layout_height="368dp"
-        android:background="@drawable/noise_disc" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="70sp"
+        android:layout_marginTop="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="100dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DB"
+        android:layout_toEndOf="@+id/soundDiscView"
+        android:layout_alignBottom="@+id/soundDiscView"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="10dp"
+        android:textSize="18sp"/>
 
     <Button
         android:id="@+id/btn_start_detect"
         android:layout_height="wrap_content"
         style="@style/HoloNewBtnStyle"
-        android:layout_below="@id/soundDiscView"
+        android:layout_above="@+id/btn_stop_detect"
         android:layout_centerHorizontal="true"
         android:text="@string/start_record"/>
 
@@ -24,10 +37,11 @@
         android:layout_height="wrap_content"
         style="@style/HoloNewBtnStyle"
         android:layout_marginTop="30dp"
-        android:layout_below="@+id/btn_start_detect"
         android:layout_centerHorizontal="true"
         android:text="@string/stop_detect"
-        android:enabled="false"/>
+        android:enabled="false"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"/>
 
     <include layout="@layout/toolbar"/>
 

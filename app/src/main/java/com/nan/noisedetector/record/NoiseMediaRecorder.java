@@ -5,7 +5,7 @@ import android.media.MediaRecorder;
 import java.io.File;
 import java.io.IOException;
 
-public class MyMediaRecorder {
+public class NoiseMediaRecorder {
 	
 	private File myRecAudioFile ;
 	private MediaRecorder mMediaRecorder ;

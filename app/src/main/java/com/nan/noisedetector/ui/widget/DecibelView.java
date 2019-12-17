@@ -16,7 +16,7 @@ import android.view.WindowManager;
 import com.nan.noisedetector.R;
 import com.nan.noisedetector.util.DecibelUtil;
 
-public class SoundDiscView extends AppCompatImageView {
+public class DecibelView extends AppCompatImageView {
 
     private int newWidth, newHeight;
     private Matrix mMatrix = new Matrix();
@@ -24,11 +24,11 @@ public class SoundDiscView extends AppCompatImageView {
     private Paint paint = new Paint();
     static final long  ANIMATION_INTERVAL = 20;
 
-    public SoundDiscView(Context context) {
+    public DecibelView(Context context) {
         super(context);
     }
 
-    public SoundDiscView(Context context, AttributeSet attrs) {
+    public DecibelView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -79,9 +79,9 @@ public class SoundDiscView extends AppCompatImageView {
         if (indicatorBitmap == null) {
             init();
         }
-        mMatrix.setRotate(getAngle(DecibelUtil.getDbCount()), newWidth >> 1, (float) newHeight * 215 / 460);   //片相对位置
+        mMatrix.setRotate(getAngle(DecibelUtil.INSTANCE.getDbCount()), newWidth >> 1, (float) newHeight * 215 / 460);   //片相对位置
         canvas.drawBitmap(indicatorBitmap, mMatrix, paint);
-        canvas.drawText((int) DecibelUtil.getDbCount()+" DB", newWidth >> 1,(float) newHeight * 36 / 46, paint); //图片相对位置
+        canvas.drawText((int) DecibelUtil.INSTANCE.getDbCount()+" DB", newWidth >> 1,(float) newHeight * 36 / 46, paint); //图片相对位置
     }
 
     private float getAngle(float db){
