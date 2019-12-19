@@ -80,14 +80,6 @@ class SoundActivity : AppCompatActivity() {
 
     private fun initView() {
         //        mSoundDiscView = findViewById(R.id.soundDiscView);
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        toolbar.setTitle(R.string.app_name)
-        toolbar.inflateMenu(R.menu.menu_main)
-        toolbar.setOnMenuItemClickListener {
-            if (it.itemId == R.id.action_settings)
-                startActivity<SettingActivity>()
-            true
-        }
         btn_start_detect.setOnClickListener {
             startRecord()
             btn_start_detect.isEnabled = false
