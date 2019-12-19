@@ -1,4 +1,4 @@
-package com.nan.noisedetector.record
+package com.nan.noisedetector.recorder
 
 import android.media.MediaRecorder
 import java.io.File

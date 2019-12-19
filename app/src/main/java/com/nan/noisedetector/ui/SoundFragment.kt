@@ -2,6 +2,7 @@ package com.nan.noisedetector.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.ActivityManager
 import android.app.Notification
 import android.app.NotificationManager
@@ -13,35 +14,31 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.support.v4.app.ActivityCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import android.support.v4.app.Fragment
 import android.util.Log
-import android.view.MenuItem
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.view.ViewGroup
 import com.nan.noisedetector.R
-import com.nan.noisedetector.record.NoiseMediaRecorder
-import com.nan.noisedetector.ui.SoundActivity
+import com.nan.noisedetector.recorder.NoiseMediaRecorder
 import com.nan.noisedetector.util.DecibelUtil.clear
 import com.nan.noisedetector.util.DecibelUtil.getDbCount
 import com.nan.noisedetector.util.DecibelUtil.setDbCount
 import com.nan.noisedetector.util.FileUtil
 import com.nan.noisedetector.util.PreferenceHelper.isOpenNotify
 import com.nan.noisedetector.util.PreferenceHelper.threshold
-import kotlinx.android.synthetic.main.activity_sound.*
-import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.toast
+import kotlinx.android.synthetic.main.fragment_sound.*
+import org.jetbrains.anko.support.v4.toast
 import kotlin.math.log10
 
-class SoundActivity : AppCompatActivity() {
+class SoundFragment : Fragment() {
     private var mThreshold = 0f
     //    private SoundDiscView mSoundDiscView;
     private var mRecorder: NoiseMediaRecorder = NoiseMediaRecorder()
+    private lateinit var activity: Activity
 
     companion object {
-        private const val TAG = "SoundActivity"
+        private const val TAG = "SoundFragment"
         private val PERMISSIONS = arrayOf(
                 Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -69,11 +66,19 @@ class SoundActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
-//        getWindow().setEnterTransition(new Slide(Gravity.TOP));
-        setContentView(R.layout.activity_sound)
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        activity = context as Activity
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_sound, container, false)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart")
         initView()
         verifyPermissions()
     }
@@ -93,10 +98,10 @@ class SoundActivity : AppCompatActivity() {
     }
 
     private fun verifyPermissions() {
-        val audioPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-        val storagePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val audioPermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO)
+        val storagePermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
         if (audioPermission != PackageManager.PERMISSION_GRANTED || storagePermission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, PERMISSIONS, GET_PERMISSION)
+            ActivityCompat.requestPermissions(activity, PERMISSIONS, GET_PERMISSION)
         }
     }
 
@@ -128,7 +133,7 @@ class SoundActivity : AppCompatActivity() {
         if (isOpenNotify && dbCount < mThreshold) {
             return
         }
-        val builder = Notification.Builder(this@SoundActivity)
+        val builder = Notification.Builder(activity)
         var intent: Intent
         //        PendingIntent pendingIntent = PendingIntent.getActivity(SoundActivity.this,0,intent,0);  //点击跳转
         builder.setSmallIcon(R.mipmap.ic_launcher) //小图标，在大图标右下角
@@ -137,7 +142,7 @@ class SoundActivity : AppCompatActivity() {
                 .setAutoCancel(true) //点击的时候消失
                 .setContentTitle("噪音超限")
                 .setContentText("当前噪音分贝为$dbCount,大于阈值$mThreshold")
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val manager = activity.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.notify(1, builder.build())
     }
 
