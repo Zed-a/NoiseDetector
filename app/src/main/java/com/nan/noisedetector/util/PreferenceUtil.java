@@ -188,26 +188,6 @@ public class PreferenceUtil {
         return preferences.getBoolean(context.getString(resId), defValue);
     }
 
-    public boolean contains(String key) {
-        checkNull();
-        return preferences.contains(key);
-    }
-
-    public boolean contains(@StringRes int resId) {
-        checkNull();
-        return preferences.contains(context.getString(resId));
-    }
-
-    public void registerOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
-        checkNull();
-        preferences.registerOnSharedPreferenceChangeListener(listener);
-    }
-
-    public void unregisterOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
-        checkNull();
-        preferences.unregisterOnSharedPreferenceChangeListener(listener);
-    }
-
     public SharedPreferences getPreferences() {
         return preferences;
     }
