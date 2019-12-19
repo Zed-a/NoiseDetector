@@ -2,25 +2,23 @@ package com.nan.noisedetector.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.ActivityManager
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.nan.noisedetector.R
 import com.nan.noisedetector.recorder.NoiseMediaRecorder
+import com.nan.noisedetector.ui.base.BaseFragment
 import com.nan.noisedetector.util.DecibelUtil.clear
 import com.nan.noisedetector.util.DecibelUtil.getDbCount
 import com.nan.noisedetector.util.DecibelUtil.setDbCount
@@ -31,11 +29,10 @@ import kotlinx.android.synthetic.main.fragment_sound.*
 import org.jetbrains.anko.support.v4.toast
 import kotlin.math.log10
 
-class SoundFragment : Fragment() {
+class SoundFragment : BaseFragment() {
     private var mThreshold = 0f
     //    private SoundDiscView mSoundDiscView;
-    private var mRecorder: NoiseMediaRecorder = NoiseMediaRecorder()
-    private lateinit var activity: Activity
+    private val mRecorder: NoiseMediaRecorder = NoiseMediaRecorder()
 
     companion object {
         private const val TAG = "SoundFragment"
@@ -64,11 +61,6 @@ class SoundFragment : Fragment() {
                 0 // 栈里找不到，返回3
             }
         }
-    }
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        activity = context as Activity
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -134,7 +126,7 @@ class SoundFragment : Fragment() {
             return
         }
         val builder = Notification.Builder(activity)
-        var intent: Intent
+//        var intent: Intent
         //        PendingIntent pendingIntent = PendingIntent.getActivity(SoundActivity.this,0,intent,0);  //点击跳转
         builder.setSmallIcon(R.mipmap.ic_launcher) //小图标，在大图标右下角
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)) //大图标，没有设置时小图标就是大图标
