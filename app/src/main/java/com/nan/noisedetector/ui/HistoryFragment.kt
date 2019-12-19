@@ -18,11 +18,11 @@ class HistoryFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_history, container, false)
-        initView(view)
+        initTable(view)
         return view
     }
 
-    private fun initView(view: View) {
+    private fun initTable(view: View) {
         list.add(HistoryData("123",1,3,2))
         list.add(HistoryData("123",1,3,2))
         list.add(HistoryData("123",1,3,2))

@@ -25,6 +25,7 @@ import com.nan.noisedetector.util.DecibelUtil.setDbCount
 import com.nan.noisedetector.util.FileUtil
 import com.nan.noisedetector.util.PreferenceHelper.isOpenNotify
 import com.nan.noisedetector.util.PreferenceHelper.threshold
+import com.nan.noisedetector.util.getFormatTime
 import kotlinx.android.synthetic.main.fragment_sound.*
 import org.jetbrains.anko.support.v4.toast
 import kotlin.math.log10
@@ -33,9 +34,12 @@ class SoundFragment : BaseFragment() {
     private var mThreshold = 0f
     //    private SoundDiscView mSoundDiscView;
     private val mRecorder: NoiseMediaRecorder = NoiseMediaRecorder()
+    private var startTime = ""
+    private var endTime = ""
+    private var maxDecibel = 0
+    private var minDecibel = 0
 
     companion object {
-        private const val TAG = "SoundFragment"
         private val PERMISSIONS = arrayOf(
                 Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -111,11 +115,11 @@ class SoundFragment : BaseFragment() {
             }
             val volume = mRecorder.maxAmplitude //获取声压值
             if (volume > 0 && volume < 1000000) {
-                val dbCount = 20 * log10(volume.toDouble()).toFloat()
-                //showNotification(dbCount);
-                setDbCount(dbCount) //将声压值转为分贝值
+                setDbCount(20 * log10(volume.toDouble()).toFloat()) //将声压值转为分贝值并平滑处理
                 //mSoundDiscView.refresh();
-                soundDiscView.text = (getDbCount().toInt() + 20).toString()
+                val dbCount = getDbCount().toInt() + 20
+                //showNotification(dbCount);
+                soundDiscView.text = dbCount.toString()
             }
             sendEmptyMessageDelayed(MSG_WHAT, REFRESH_TIME.toLong())
         }
@@ -142,6 +146,7 @@ class SoundFragment : BaseFragment() {
      * 开始记录
      */
     private fun startRecord() {
+        startTime = getFormatTime()
         val file = FileUtil.createFile("temp.amr")
         if (file != null) {
             Log.d(TAG, "file path=" + file.path)
@@ -162,6 +167,7 @@ class SoundFragment : BaseFragment() {
     }
 
     private fun stopRecord() {
+        endTime = getFormatTime()
         mRecorder.delete()
         handler.removeMessages(MSG_WHAT)
         clear()
