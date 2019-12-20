@@ -18,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.nan.noisedetector.R
 import com.nan.noisedetector.bean.HistoryData
+import com.nan.noisedetector.event.MessageEvent
 import com.nan.noisedetector.recorder.NoiseMediaRecorder
 import com.nan.noisedetector.ui.base.BaseFragment
 import com.nan.noisedetector.util.DecibelUtil.clear
@@ -30,6 +31,7 @@ import com.nan.noisedetector.util.PreferenceHelper.threshold
 import com.nan.noisedetector.util.getDate
 import com.nan.noisedetector.util.getTime
 import kotlinx.android.synthetic.main.fragment_sound.*
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.support.v4.toast
 import kotlin.math.log10
 
@@ -189,6 +191,8 @@ class SoundFragment : BaseFragment() {
         if (count>5) {
             list.add(HistoryData(getDate(), "$startTime-$endTime", maxDecibel, (totalDecibel / count).toInt()))
             historyRecord = list
+            Log.d(TAG, "post event")
+            EventBus.getDefault().post(MessageEvent())
             for (history: HistoryData in historyRecord) {
                 Log.d(TAG, "historyRecord=$history")
             }
