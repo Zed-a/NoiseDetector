@@ -17,15 +17,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.nan.noisedetector.R
+import com.nan.noisedetector.bean.HistoryData
 import com.nan.noisedetector.recorder.NoiseMediaRecorder
 import com.nan.noisedetector.ui.base.BaseFragment
 import com.nan.noisedetector.util.DecibelUtil.clear
 import com.nan.noisedetector.util.DecibelUtil.getDbCount
 import com.nan.noisedetector.util.DecibelUtil.setDbCount
 import com.nan.noisedetector.util.FileUtil
+import com.nan.noisedetector.util.PreferenceHelper.historyRecord
 import com.nan.noisedetector.util.PreferenceHelper.isOpenNotify
 import com.nan.noisedetector.util.PreferenceHelper.threshold
-import com.nan.noisedetector.util.getFormatTime
+import com.nan.noisedetector.util.getDate
+import com.nan.noisedetector.util.getTime
 import kotlinx.android.synthetic.main.fragment_sound.*
 import org.jetbrains.anko.support.v4.toast
 import kotlin.math.log10
@@ -37,7 +40,9 @@ class SoundFragment : BaseFragment() {
     private var startTime = ""
     private var endTime = ""
     private var maxDecibel = 0
-    private var minDecibel = 0
+    private var minDecibel = 1000
+    private var totalDecibel = 0L
+    private var count = 0
 
     companion object {
         private val PERMISSIONS = arrayOf(
@@ -49,10 +54,8 @@ class SoundFragment : BaseFragment() {
         private const val REFRESH_TIME = 100
 
         fun isAppAlive(context: Context, packageName: String): Int {
-            val activityManager = context
-                    .getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-            val listInfos = activityManager
-                    .getRunningTasks(20)
+            val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            val listInfos = activityManager.getRunningTasks(20)
             // 判断程序是否在栈顶
             return if (listInfos[0].topActivity.packageName == packageName) {
                 1
@@ -117,9 +120,15 @@ class SoundFragment : BaseFragment() {
             if (volume > 0 && volume < 1000000) {
                 setDbCount(20 * log10(volume.toDouble()).toFloat()) //将声压值转为分贝值并平滑处理
                 //mSoundDiscView.refresh();
-                val dbCount = getDbCount().toInt() + 20
-                //showNotification(dbCount);
-                soundDiscView.text = dbCount.toString()
+                with(getDbCount().toInt() + 20) {
+                    //showNotification(dbCount);
+                    maxDecibel = if (this > maxDecibel) this else maxDecibel
+                    minDecibel = if (this in 1 until minDecibel) this else minDecibel
+                    totalDecibel += this
+                    count++
+                    soundDiscView.text = this.toString()
+                }
+
             }
             sendEmptyMessageDelayed(MSG_WHAT, REFRESH_TIME.toLong())
         }
@@ -146,7 +155,7 @@ class SoundFragment : BaseFragment() {
      * 开始记录
      */
     private fun startRecord() {
-        startTime = getFormatTime()
+        initRecordData()
         val file = FileUtil.createFile("temp.amr")
         if (file != null) {
             Log.d(TAG, "file path=" + file.path)
@@ -166,8 +175,24 @@ class SoundFragment : BaseFragment() {
         }
     }
 
+    private fun initRecordData() {
+        maxDecibel = 0
+        minDecibel = 1000
+        totalDecibel = 0
+        startTime = getTime()
+        count = 0
+    }
+
     private fun stopRecord() {
-        endTime = getFormatTime()
+        endTime = getTime()
+        val list = historyRecord
+        if (count>5) {
+            list.add(HistoryData(getDate(), "$startTime-$endTime", maxDecibel, (totalDecibel / count).toInt()))
+            historyRecord = list
+            for (history: HistoryData in historyRecord) {
+                Log.d(TAG, "historyRecord=$history")
+            }
+        }
         mRecorder.delete()
         handler.removeMessages(MSG_WHAT)
         clear()

@@ -6,4 +6,5 @@ import java.util.*
 /**
  * Created by nan on 2019-12-19.
  */
-fun getFormatTime() = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.SIMPLIFIED_CHINESE).format(Date())
+fun getTime(): String = SimpleDateFormat("HH:mm:ss", Locale.SIMPLIFIED_CHINESE).format(Date())
+fun getDate(): String = SimpleDateFormat("yyyy-MM-dd", Locale.SIMPLIFIED_CHINESE).format(Date())

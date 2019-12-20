@@ -20,10 +20,10 @@ android {
         }
     }
 
-    compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
-    }
+//    compileOptions {
+//        targetCompatibility 1.8
+//        sourceCompatibility 1.8
+//    }
 }
 
 dependencies {
@@ -37,6 +37,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko:$anko_version"
     implementation 'com.github.chenupt.android:springindicator:1.0.2@aar'
     implementation 'com.github.huangyanbin:SmartTable:2.2.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
 }
 repositories {
     mavenCentral()
