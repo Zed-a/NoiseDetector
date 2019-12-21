@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".ui.HistoryFragment"
     android:orientation="vertical">
-    
-    <com.bin.david.form.core.SmartTable
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/table_view"
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_history"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:clipToPadding="false"/>
 
 </LinearLayout>

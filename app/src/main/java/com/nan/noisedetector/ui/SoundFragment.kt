@@ -112,19 +112,21 @@ class SoundFragment : BaseFragment() {
     private fun getLocation() {
         LocationManager.getLocation(object : LocationCallback {
             override fun action(location: BDLocation): Boolean {
-                Log.d(TAG, "latitude=${location.latitude} longitude=${location.longitude} " +
-                        "street=${location.street} number=${location.streetNumber}")
-                val list = location.poiList
-                when {
-                    list == null -> {
-                        Log.d(TAG, "list = null")
-                    }
-                    list.size == 0 -> {
-                        Log.d(TAG, "list is empty")
-                    }
-                    else -> {
-                        for (poi: Poi in list) {
-                            Log.d(TAG, "poi=${poi.name} ${poi.addr}")
+                with(location) {
+                    Log.d(TAG, "latitude=${latitude} longitude=${longitude} " +
+                            "street=${street} number=${streetNumber}")
+                    val list = poiList
+                    when {
+                        list == null -> {
+                            Log.d(TAG, "list = null")
+                        }
+                        list.size == 0 -> {
+                            Log.d(TAG, "list is empty")
+                        }
+                        else -> {
+                            for (poi: Poi in list) {
+                                Log.d(TAG, "poi=${poi.name} ${poi.addr}")
+                            }
                         }
                     }
                 }

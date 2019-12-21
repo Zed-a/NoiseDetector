@@ -1,5 +1,6 @@
 package com.nan.noisedetector.util
 
+import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -8,3 +9,4 @@ import java.util.*
  */
 fun getTime(): String = SimpleDateFormat("HH:mm:ss", Locale.SIMPLIFIED_CHINESE).format(Date())
 fun getDate(): String = SimpleDateFormat("yyyy-MM-dd", Locale.SIMPLIFIED_CHINESE).format(Date())
+fun logd(tag: String, message: String) = Log.d(tag, message)
