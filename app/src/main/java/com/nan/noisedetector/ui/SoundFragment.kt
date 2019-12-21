@@ -6,7 +6,6 @@ import android.app.ActivityManager
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
@@ -16,9 +15,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.baidu.location.BDLocation
+import com.baidu.location.Poi
 import com.nan.noisedetector.R
 import com.nan.noisedetector.bean.HistoryData
 import com.nan.noisedetector.event.MessageEvent
+import com.nan.noisedetector.location.LocationCallback
+import com.nan.noisedetector.location.LocationManager
 import com.nan.noisedetector.recorder.NoiseMediaRecorder
 import com.nan.noisedetector.ui.base.BaseFragment
 import com.nan.noisedetector.util.DecibelUtil.clear
@@ -39,6 +42,7 @@ class SoundFragment : BaseFragment() {
     private var mThreshold = 0f
     //    private SoundDiscView mSoundDiscView;
     private val mRecorder: NoiseMediaRecorder = NoiseMediaRecorder()
+
     private var startTime = ""
     private var endTime = ""
     private var maxDecibel = 0
@@ -49,7 +53,13 @@ class SoundFragment : BaseFragment() {
     companion object {
         private val PERMISSIONS = arrayOf(
                 Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.CHANGE_WIFI_STATE,
+                Manifest.permission.INTERNET
         )
         private const val GET_PERMISSION = 1
         private const val MSG_WHAT = 0x1001
@@ -90,6 +100,7 @@ class SoundFragment : BaseFragment() {
             startRecord()
             btn_start_detect.isEnabled = false
             btn_stop_detect.isEnabled = true
+            getLocation()
         }
         btn_stop_detect.setOnClickListener{
             stopRecord()
@@ -98,12 +109,31 @@ class SoundFragment : BaseFragment() {
         }
     }
 
+    private fun getLocation() {
+        LocationManager.getLocation(object : LocationCallback {
+            override fun action(location: BDLocation): Boolean {
+                Log.d(TAG, "latitude=${location.latitude} longitude=${location.longitude} " +
+                        "street=${location.street} number=${location.streetNumber}")
+                val list = location.poiList
+                when {
+                    list == null -> {
+                        Log.d(TAG, "list = null")
+                    }
+                    list.size == 0 -> {
+                        Log.d(TAG, "list is empty")
+                    }
+                    else -> {
+                        for (poi: Poi in list) {
+                            Log.d(TAG, "poi=${poi.name} ${poi.addr}")
+                        }
+                    }
+                }
+                return true
+            }
+        })    }
+
     private fun verifyPermissions() {
-        val audioPermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO)
-        val storagePermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        if (audioPermission != PackageManager.PERMISSION_GRANTED || storagePermission != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, PERMISSIONS, GET_PERMISSION)
-        }
     }
 
     override fun onResume() {
@@ -205,7 +235,7 @@ class SoundFragment : BaseFragment() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         stopRecord()
+        super.onDestroy()
     }
 }
