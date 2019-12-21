@@ -49,6 +49,7 @@ class SoundFragment : BaseFragment() {
     private var minDecibel = 1000
     private var totalDecibel = 0L
     private var count = 0
+    private var mLocation = ""
 
     companion object {
         private val PERMISSIONS = arrayOf(
@@ -129,6 +130,7 @@ class SoundFragment : BaseFragment() {
                             }
                         }
                     }
+                    mLocation = street+streetNumber
                 }
                 return true
             }
@@ -154,7 +156,7 @@ class SoundFragment : BaseFragment() {
             if (volume > 0 && volume < 1000000) {
                 setDbCount(20 * log10(volume.toDouble()).toFloat()) //将声压值转为分贝值并平滑处理
                 //mSoundDiscView.refresh();
-                with(getDbCount().toInt() + 20) {
+                with(getDbCount().toInt()) {
                     //showNotification(dbCount);
                     maxDecibel = if (this > maxDecibel) this else maxDecibel
                     minDecibel = if (this in 1 until minDecibel) this else minDecibel
@@ -215,13 +217,14 @@ class SoundFragment : BaseFragment() {
         totalDecibel = 0
         startTime = getTime()
         count = 0
+        mLocation = ""
     }
 
     private fun stopRecord() {
         endTime = getTime()
         val list = historyRecord
         if (count>5) {
-            list.add(HistoryData(getDate(), "$startTime-$endTime", maxDecibel, (totalDecibel / count).toInt()))
+            list.add(HistoryData(getDate(), "$startTime-$endTime", maxDecibel, (totalDecibel / count).toInt(), mLocation))
             historyRecord = list
             Log.d(TAG, "post event")
             EventBus.getDefault().post(MessageEvent())

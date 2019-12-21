@@ -1,5 +1,6 @@
 package com.nan.noisedetector.ui.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -18,16 +19,21 @@ class HistoryListAdapter(private var mData: ArrayList<HistoryData>, private val 
                 parent, false))
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.time.text = mData[position].startTime
-        holder.position.text = mData[position].startTime
-        holder.maxDecibel.text = mData[position].startTime
-        holder.averageDecibel.text = mData[position].startTime
+        with(mData[position]) {
+            holder.time.text = date+"  "+mData[position].time
+            holder.position.text = location
+            holder.maxDecibel.text = max.toString()
+            holder.averageDecibel.text = average.toString()
+            holder.item.setOnClickListener {}
+        }
     }
 
     override fun getItemCount() = mData.size
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val item = view
         val time: TextView = view.findViewById(R.id.tv_time)
         val position: TextView = view.findViewById(R.id.tv_position)
         val maxDecibel: TextView = view.findViewById(R.id.tv_max_decibel)
