@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.nan.noisedetector.R
 import com.nan.noisedetector.bean.HistoryData
-import com.nan.noisedetector.util.PreferenceHelper
+import com.nan.noisedetector.util.PreferenceHelper.historyRecord
 
 class HistoryListAdapter(private var mData: ArrayList<HistoryData>, private val context: Context) :
         RecyclerView.Adapter<HistoryListAdapter.ViewHolder>() {
@@ -22,11 +22,15 @@ class HistoryListAdapter(private var mData: ArrayList<HistoryData>, private val 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(mData[position]) {
-            holder.time.text = date+"  "+mData[position].time
+            holder.time.text = "$date  $time"
             holder.position.text = location
             holder.maxDecibel.text = max.toString()
             holder.averageDecibel.text = average.toString()
-            holder.item.setOnClickListener {}
+            holder.item.setOnLongClickListener {
+                delete(position)
+                true
+            }
+
         }
     }
 
@@ -41,7 +45,13 @@ class HistoryListAdapter(private var mData: ArrayList<HistoryData>, private val 
     }
 
     fun refresh() {
-        mData = PreferenceHelper.historyRecord
+        mData = historyRecord
+        notifyDataSetChanged()
+    }
+
+    private fun delete(position: Int) {
+        mData.removeAt(position)
+        historyRecord = mData
         notifyDataSetChanged()
     }
 }

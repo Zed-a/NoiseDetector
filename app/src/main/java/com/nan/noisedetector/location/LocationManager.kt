@@ -25,9 +25,11 @@ object LocationManager {
     }
 
     private fun requestLocation() {
+        logd(TAG, "requestLocation")
         val option = LocationClientOption()
         option.setIsNeedAddress(true)
         option.locationMode = LocationClientOption.LocationMode.Hight_Accuracy
+        option.setScanSpan(5000)
         mLocationClient.locOption = option
         mLocationClient.start()
     }
@@ -36,12 +38,11 @@ object LocationManager {
         override fun onReceiveLocation(location: BDLocation) {
             logd(TAG, "onReceiveLocation")
             if (location.locType == BDLocation.TypeGpsLocation || location.locType == BDLocation.TypeNetWorkLocation)
-                if (callback.action(location))
-                    mLocationClient.stop()
+                callback.action(location)
         }
     }
 }
 
 interface LocationCallback {
-    fun action(location: BDLocation): Boolean
+    fun action(location: BDLocation)
 }

@@ -24,15 +24,13 @@ import com.nan.noisedetector.location.LocationCallback
 import com.nan.noisedetector.location.LocationManager
 import com.nan.noisedetector.recorder.NoiseMediaRecorder
 import com.nan.noisedetector.ui.base.BaseFragment
+import com.nan.noisedetector.util.*
 import com.nan.noisedetector.util.DecibelUtil.clear
 import com.nan.noisedetector.util.DecibelUtil.getDbCount
 import com.nan.noisedetector.util.DecibelUtil.setDbCount
-import com.nan.noisedetector.util.FileUtil
 import com.nan.noisedetector.util.PreferenceHelper.historyRecord
 import com.nan.noisedetector.util.PreferenceHelper.isOpenNotify
 import com.nan.noisedetector.util.PreferenceHelper.threshold
-import com.nan.noisedetector.util.getDate
-import com.nan.noisedetector.util.getTime
 import kotlinx.android.synthetic.main.fragment_sound.*
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.support.v4.toast
@@ -93,6 +91,7 @@ class SoundFragment : BaseFragment() {
         Log.d(TAG, "onStart")
         initView()
         verifyPermissions()
+        getLocation()
     }
 
     private fun initView() {
@@ -101,7 +100,6 @@ class SoundFragment : BaseFragment() {
             startRecord()
             btn_start_detect.isEnabled = false
             btn_stop_detect.isEnabled = true
-            getLocation()
         }
         btn_stop_detect.setOnClickListener{
             stopRecord()
@@ -112,33 +110,25 @@ class SoundFragment : BaseFragment() {
 
     private fun getLocation() {
         LocationManager.getLocation(object : LocationCallback {
-            override fun action(location: BDLocation): Boolean {
+            override fun action(location: BDLocation) {
                 with(location) {
                     Log.d(TAG, "latitude=${latitude} longitude=${longitude} " +
                             "street=${street} number=${streetNumber}")
-                    val list = poiList
                     when {
-                        list == null -> {
-                            Log.d(TAG, "list = null")
-                        }
-                        list.size == 0 -> {
-                            Log.d(TAG, "list is empty")
-                        }
-                        else -> {
-                            for (poi: Poi in list) {
-                                Log.d(TAG, "poi=${poi.name} ${poi.addr}")
-                            }
-                        }
+                        poiList == null || poiList.size == 0 ->
+                            Log.d(TAG, "poiList is null or empty")
+                        else ->
+                            for (poi: Poi in poiList)
+                                Log.d(TAG, "poiList=${poi.name} ${poi.addr}")
                     }
                     mLocation = street+streetNumber
+                    logd(TAG, "getLocation mLocation=$mLocation")
                 }
-                return true
             }
-        })    }
-
-    private fun verifyPermissions() {
-            ActivityCompat.requestPermissions(activity, PERMISSIONS, GET_PERMISSION)
+        })
     }
+
+    private fun verifyPermissions() = ActivityCompat.requestPermissions(activity, PERMISSIONS, GET_PERMISSION)
 
     override fun onResume() {
         super.onResume()
@@ -217,14 +207,19 @@ class SoundFragment : BaseFragment() {
         totalDecibel = 0
         startTime = getTime()
         count = 0
-        mLocation = ""
     }
 
     private fun stopRecord() {
+        logd(TAG, "stopRecordr mLocation=$mLocation")
         endTime = getTime()
         val list = historyRecord
         if (count>5) {
-            list.add(HistoryData(getDate(), "$startTime-$endTime", maxDecibel, (totalDecibel / count).toInt(), mLocation))
+            list.add(HistoryData(
+                    getDate(),
+                    "$startTime-$endTime",
+                    maxDecibel,
+                    (totalDecibel / count).toInt(),
+                    if (isEmpty(mLocation)) "定位失败" else mLocation))
             historyRecord = list
             Log.d(TAG, "post event")
             EventBus.getDefault().post(MessageEvent())
