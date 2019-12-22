@@ -24,13 +24,17 @@
                 android:id="@+id/tv_position"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:singleLine="true"
+                android:ellipsize="end"/>
 
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:singleLine="true"
+                android:ellipsize="end"/>
 
         </LinearLayout>
 
