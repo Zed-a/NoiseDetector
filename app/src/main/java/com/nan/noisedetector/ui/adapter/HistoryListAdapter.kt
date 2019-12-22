@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import com.nan.noisedetector.R
 import com.nan.noisedetector.bean.HistoryData
@@ -26,11 +27,8 @@ class HistoryListAdapter(private var mData: ArrayList<HistoryData>, private val 
             holder.position.text = location
             holder.maxDecibel.text = max.toString()
             holder.averageDecibel.text = average.toString()
-            holder.item.setOnLongClickListener {
-                delete(position)
-                true
-            }
-
+            holder.item.setOnClickListener {}
+            holder.deleteView.setOnClickListener { delete(position) }
         }
     }
 
@@ -38,6 +36,7 @@ class HistoryListAdapter(private var mData: ArrayList<HistoryData>, private val 
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val item = view
+        val deleteView: Button = view.findViewById(R.id.delete)
         val time: TextView = view.findViewById(R.id.tv_time)
         val position: TextView = view.findViewById(R.id.tv_position)
         val maxDecibel: TextView = view.findViewById(R.id.tv_max_decibel)

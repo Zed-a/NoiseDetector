@@ -1,6 +1,7 @@
 package com.nan.noisedetector.ui
 
 import android.os.Bundle
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -11,11 +12,11 @@ import com.nan.noisedetector.R
 import com.nan.noisedetector.event.MessageEvent
 import com.nan.noisedetector.ui.adapter.HistoryListAdapter
 import com.nan.noisedetector.ui.base.BaseFragment
+import com.nan.noisedetector.ui.widget.SwipeItemLayout.OnSwipeItemTouchListener
 import com.nan.noisedetector.util.PreferenceHelper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-
 
 class HistoryFragment : BaseFragment() {
 
@@ -40,6 +41,9 @@ class HistoryFragment : BaseFragment() {
         adapter = HistoryListAdapter(PreferenceHelper.historyRecord, activity)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.addOnItemTouchListener(OnSwipeItemTouchListener(context))
+        recyclerView.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+
         return view
     }
 
