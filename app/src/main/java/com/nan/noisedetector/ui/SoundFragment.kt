@@ -211,7 +211,7 @@ class SoundFragment : BaseFragment() {
     }
 
     private fun stopRecord() {
-        logd(TAG, "stopRecordr mLocation=$mLocation")
+        logd(TAG, "stopRecorder mLocation=$mLocation")
         endTime = getTime()
         val list = historyRecord
         if (count>5) {
@@ -224,9 +224,6 @@ class SoundFragment : BaseFragment() {
             historyRecord = list
             Log.d(TAG, "post event")
             EventBus.getDefault().post(MessageEvent())
-            for (history: HistoryData in historyRecord) {
-                Log.d(TAG, "historyRecord=$history")
-            }
         }
         mRecorder.delete()
         handler.removeMessages(MSG_WHAT)

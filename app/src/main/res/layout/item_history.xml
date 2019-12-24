@@ -48,12 +48,14 @@
                 android:id="@+id/tv_max_decibel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <TextView
                 android:id="@+id/tv_average_decibel"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
+                android:gravity="center_vertical"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
         </LinearLayout>
