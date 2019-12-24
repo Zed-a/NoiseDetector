@@ -122,6 +122,7 @@ class SoundFragment : BaseFragment() {
                                 Log.d(TAG, "poiList=${poi.name} ${poi.addr}")
                     }
                     mLocation = street+streetNumber
+                    tv_location.text = mLocation
                     logd(TAG, "getLocation mLocation=$mLocation")
                 }
             }

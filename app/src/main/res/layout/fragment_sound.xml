@@ -5,6 +5,16 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/at_location"
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimary"/>
+
+    <TextView
         android:id="@+id/soundDiscView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
