@@ -86,9 +86,9 @@ class SoundFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_sound, container, false)
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated")
         initView()
         verifyPermissions()
         getLocation()
