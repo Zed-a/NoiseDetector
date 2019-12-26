@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.baidu.location.BDLocation
 import com.baidu.location.Poi
+import com.github.mikephil.charting.data.Entry
 import com.nan.noisedetector.R
 import com.nan.noisedetector.bean.HistoryData
 import com.nan.noisedetector.event.MessageEvent
@@ -47,6 +48,8 @@ class SoundFragment : BaseFragment() {
     private var totalDecibel = 0L
     private var count = 0
     private var mLocation = ""
+
+    private val entries = ArrayList<Entry>()
 
     companion object {
         private val PERMISSIONS = arrayOf(

@@ -10,11 +10,10 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.nan.noisedetector.R
-import com.nan.noisedetector.bean.HistoryData
 import kotlinx.android.synthetic.main.fragment_chart_slide.*
 
 class ChartSlideFragment : Fragment() {
-    private lateinit var data: HistoryData
+    private lateinit var entries: ArrayList<Entry>
     private lateinit var mContext: Context
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -23,7 +22,7 @@ class ChartSlideFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        data = arguments!!.getSerializable(DATA) as HistoryData
+        entries = arguments!!.getParcelableArrayList<Entry>(ENTRIES) as ArrayList<Entry>
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -37,12 +36,12 @@ class ChartSlideFragment : Fragment() {
 
     companion object {
 
-        const val DATA = "ChartSlideFragment:data"
+        const val ENTRIES = "ChartSlideFragment:entries"
 
-        fun newInstance(historyData: HistoryData): ChartSlideFragment {
+        fun newInstance(entries: ArrayList<Entry>): ChartSlideFragment {
             val f = ChartSlideFragment()
             val args = Bundle()
-            args.putSerializable(DATA, historyData)
+            args.putParcelableArrayList(ENTRIES, entries)
             f.arguments = args
             return f
         }
@@ -71,7 +70,7 @@ class ChartSlideFragment : Fragment() {
         chart.description.text = ""
         chart.legend.isEnabled = false
         chart.axisRight.isEnabled = false
-        chart.axisLeft.setStartAtZero(false)
+        chart.axisLeft.resetAxisMinimum()
 //        chart.axisLeft.valueFormatter = object : ValueFormatter() {
 //            override fun getFormattedValue(value: Float, axis: AxisBase?): String {
 //                return String.format("%.2f $",value)
