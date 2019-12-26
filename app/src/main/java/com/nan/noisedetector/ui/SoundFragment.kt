@@ -38,7 +38,6 @@ import kotlin.math.log10
 
 class SoundFragment : BaseFragment() {
     private var mThreshold = 0f
-    //    private SoundDiscView mSoundDiscView;
     private val mRecorder: NoiseMediaRecorder = NoiseMediaRecorder()
 
     private var startTime = ""
@@ -229,7 +228,6 @@ class SoundFragment : BaseFragment() {
         handler.removeMessages(MSG_WHAT)
         clear()
         soundDiscView.text = "0"
-        //        mSoundDiscView.refresh();
     }
 
     override fun onDestroy() {

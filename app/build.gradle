@@ -20,8 +20,8 @@ android {
         }
     }
 
-    sourceSets{
-        main{
+    sourceSets {
+        main {
             jniLibs.srcDir 'libs'
             jni.srcDirs = []    //disable automatic ndk-build
         }
@@ -29,6 +29,15 @@ android {
 
     packagingOptions {
         exclude 'META-INF/proguard/androidx-annotations.pro'
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'armeabi-v7a', 'x86_64'
+            universalApk true
+        }
     }
 
 //    compileOptions {

@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_history.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.jetbrains.anko.support.v4.startActivity
 
 class HistoryFragment : BaseFragment() {
 
@@ -40,7 +41,9 @@ class HistoryFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "historyRecord=${PreferenceHelper.historyRecord}")
-        adapter = HistoryListAdapter(PreferenceHelper.historyRecord, activity)
+        adapter = HistoryListAdapter(PreferenceHelper.historyRecord, activity) {
+            startActivity<ChartActivity>(ChartActivity.POSITION to it)
+        }
         recycler_history.adapter = adapter
         recycler_history.layoutManager = LinearLayoutManager(activity)
         recycler_history.addOnItemTouchListener(OnSwipeItemTouchListener(context))

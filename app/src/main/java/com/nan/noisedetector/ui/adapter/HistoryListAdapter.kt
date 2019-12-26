@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
@@ -19,8 +20,8 @@ import com.nan.noisedetector.R
 import com.nan.noisedetector.bean.HistoryData
 import com.nan.noisedetector.util.PreferenceHelper.historyRecord
 
-
-class HistoryListAdapter(private var mData: ArrayList<HistoryData>, private val context: Context) :
+class HistoryListAdapter(private var mData: ArrayList<HistoryData>, private val context: Context,
+                         private val itemClick: (Int) -> Unit) :
         RecyclerView.Adapter<HistoryListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,6 +42,7 @@ class HistoryListAdapter(private var mData: ArrayList<HistoryData>, private val 
             }
             holder.item.setOnClickListener {}
             holder.deleteView.setOnClickListener { delete(position) }
+            holder.mainItem.setOnClickListener { itemClick(position) }
 
             var spanString = SpannableStringBuilder("最大分贝 $max")
             spanString.setSpan(ForegroundColorSpan(context.getColor(R.color.colorPrimary)), 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -60,6 +62,7 @@ class HistoryListAdapter(private var mData: ArrayList<HistoryData>, private val 
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val item = view
+        val mainItem: LinearLayout = view.findViewById(R.id.main_item)
         val deleteView: Button = view.findViewById(R.id.delete)
         val time: TextView = view.findViewById(R.id.tv_time)
         val position: TextView = view.findViewById(R.id.tv_position)
