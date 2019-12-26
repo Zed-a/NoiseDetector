@@ -1,14 +1,18 @@
 package com.nan.noisedetector.ui
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v7.app.AppCompatActivity
 import com.nan.noisedetector.R
+import com.nan.noisedetector.ui.widget.ChartSlideFragment
+import com.nan.noisedetector.util.PreferenceHelper
 import kotlinx.android.synthetic.main.activity_chart.*
 
 class ChartActivity : AppCompatActivity() {
+
+    private val data = PreferenceHelper.historyRecord
 
     companion object {
         const val POSITION = "ChartActivity:position"
@@ -17,40 +21,24 @@ class ChartActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chart)
-        initChart()
+        initView()
+    }
+
+    private fun initView() {
+        view_pager.adapter = ChartSlidePagerAdapter(supportFragmentManager)
+        view_pager.currentItem = intent.getIntExtra(POSITION, 0)
+        view_pager.offscreenPageLimit = 4
     }
 
 
-    private fun initChart() {
-        val entries = ArrayList<Entry>()
-//        for (data in dataObjects) { // turn your data into Entry objects
-//            entries.add(MutableMap.MutableEntry<Any?, Any?>(data.getValueX(), data.getValueY()))
-//        }
-        entries.add(Entry(1.1F,2F))
-        entries.add(Entry(1.2F,2.8F))
-        entries.add(Entry(1.8F,2.5F))
-        entries.add(Entry(1.9F,2.9F))
-        val dataSet = LineDataSet(entries, "Label")
-        dataSet.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
-        dataSet.color = getColor(R.color.pale_green)
-        dataSet.fillColor = getColor(R.color.pale_green)
-        dataSet.setDrawCircles(false)
-        dataSet.setDrawValues(false)
-        dataSet.setDrawFilled(true)
-        dataSet.fillAlpha = 255
-        dataSet.cubicIntensity = 0.2f
-        chart.data = LineData(dataSet)
-        chart.xAxis.setDrawGridLines(false)
-        chart.description.text = ""
-        chart.legend.isEnabled = false
-        chart.axisRight.isEnabled = false
-        chart.axisLeft.setStartAtZero(false)
-//        chart.axisLeft.valueFormatter = object : ValueFormatter() {
-//            override fun getFormattedValue(value: Float, axis: AxisBase?): String {
-//                return String.format("%.2f $",value)
-//            }
-//        }
-        chart.invalidate()
-    }
+    inner class ChartSlidePagerAdapter constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
+        override fun getItem(position: Int): Fragment {
+            return ChartSlideFragment.newInstance(data[position])
+        }
+
+        override fun getCount(): Int {
+            return data.size
+        }
+    }
 }
