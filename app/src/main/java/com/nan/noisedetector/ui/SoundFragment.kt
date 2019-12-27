@@ -16,7 +16,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.baidu.location.BDLocation
-import com.baidu.location.Poi
 import com.github.mikephil.charting.data.Entry
 import com.nan.noisedetector.R
 import com.nan.noisedetector.bean.DataBean

@@ -50,20 +50,8 @@ class ChartActivity : AppCompatActivity() {
     }
 
     fun setSlideBtnEnable(position :Int) {
-        when (position) {
-            0 -> {
-                btn_last_page.isEnabled = false
-                btn_next_page.isEnabled = true
-            }
-            data.size -1 -> {
-                btn_last_page.isEnabled = true
-                btn_next_page.isEnabled = false
-            }
-            else -> {
-                btn_last_page.isEnabled = true
-                btn_next_page.isEnabled = true
-            }
-        }
+        btn_last_page.isEnabled = position != 0
+        btn_next_page.isEnabled = position != data.size -1
     }
 
     inner class ChartSlidePagerAdapter constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
