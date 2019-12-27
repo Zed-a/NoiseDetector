@@ -2,7 +2,7 @@ package com.nan.noisedetector.util
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.nan.noisedetector.bean.HistoryData
+import com.nan.noisedetector.bean.DataBean
 
 /**
  * Created by nan on 2019-11-21.
@@ -23,13 +23,13 @@ object PreferenceHelper {
         }
 
     private const val KEY_HISTORY_RECORD = "key_history_record"
-    var historyRecord: ArrayList<HistoryData>
+    var historyRecord: ArrayList<DataBean>
         get() =
             with(PreferenceUtil.getInstance().getString(KEY_HISTORY_RECORD, "")) {
                 if (this.isEmpty()) {
                     return ArrayList()
                 }
-                val type = object: TypeToken<List<HistoryData>>() {}.type
+                val type = object: TypeToken<List<DataBean>>() {}.type
                 return Gson().fromJson(this, type)
             }
         set(value) {

@@ -17,21 +17,20 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import com.nan.noisedetector.R
-import com.nan.noisedetector.bean.HistoryData
+import com.nan.noisedetector.bean.DataBean
 import com.nan.noisedetector.util.PreferenceHelper.historyRecord
 
-class HistoryListAdapter(private var mData: ArrayList<HistoryData>, private val context: Context,
+class HistoryListAdapter(private var mData: ArrayList<DataBean>, private val context: Context,
                          private val itemClick: (Int) -> Unit) :
         RecyclerView.Adapter<HistoryListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_history,
-                parent, false))
+        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_history, parent, false))
     }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        with(mData[position]) {
+        with(mData[position].historyData) {
             holder.time.text = "$date    $time"
             holder.position.text = location
             holder.position.setOnLongClickListener {
@@ -53,8 +52,6 @@ class HistoryListAdapter(private var mData: ArrayList<HistoryData>, private val 
             spanString.setSpan(ForegroundColorSpan(context.getColor(R.color.colorPrimary)), 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             spanString.setSpan(AbsoluteSizeSpan(10, true), 0, 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             holder.averageDecibel.text = spanString
-
-
         }
     }
 

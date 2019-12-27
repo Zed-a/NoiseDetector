@@ -19,6 +19,7 @@ import com.baidu.location.BDLocation
 import com.baidu.location.Poi
 import com.github.mikephil.charting.data.Entry
 import com.nan.noisedetector.R
+import com.nan.noisedetector.bean.DataBean
 import com.nan.noisedetector.bean.HistoryData
 import com.nan.noisedetector.event.MessageEvent
 import com.nan.noisedetector.location.LocationCallback
@@ -49,7 +50,7 @@ class SoundFragment : BaseFragment() {
     private var count = 0
     private var mLocation = ""
 
-    private val entries = ArrayList<Entry>()
+    private var entries = ArrayList<Entry>()
 
     companion object {
         private val PERMISSIONS = arrayOf(
@@ -64,7 +65,7 @@ class SoundFragment : BaseFragment() {
         )
         private const val GET_PERMISSION = 1
         private const val MSG_WHAT = 0x1001
-        private const val REFRESH_TIME = 100
+        private const val REFRESH_TIME = 500
 
         fun isAppAlive(context: Context, packageName: String): Int {
             val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
@@ -154,6 +155,7 @@ class SoundFragment : BaseFragment() {
                     maxDecibel = if (this > maxDecibel) this else maxDecibel
                     minDecibel = if (this in 1 until minDecibel) this else minDecibel
                     totalDecibel += this
+                    entries.add(Entry(count.toFloat()/2, this.toFloat()))
                     count++
                     soundDiscView.text = this.toString()
                 }
@@ -191,7 +193,7 @@ class SoundFragment : BaseFragment() {
             try {
                 mRecorder.setMyRecAudioFile(file)
                 if (mRecorder.startRecorder()) {
-                    handler.sendEmptyMessageDelayed(MSG_WHAT, REFRESH_TIME.toLong())
+                    handler.sendEmptyMessage(MSG_WHAT)
                 } else {
                     toast("启动录音失败")
                 }
@@ -217,16 +219,18 @@ class SoundFragment : BaseFragment() {
         endTime = getTime()
         val list = historyRecord
         if (count>5) {
-            list.add(HistoryData(
+            list.add(DataBean(HistoryData(
                     getDate(),
                     "$startTime-$endTime",
                     maxDecibel,
                     (totalDecibel / count).toInt(),
-                    if (isEmpty(mLocation)) "定位失败" else mLocation))
+                    if (isEmpty(mLocation)) "定位失败" else mLocation)
+                    , entries))
             historyRecord = list
             Log.d(TAG, "post event")
             EventBus.getDefault().post(MessageEvent())
         }
+        entries = ArrayList()
         mRecorder.delete()
         handler.removeMessages(MSG_WHAT)
         clear()

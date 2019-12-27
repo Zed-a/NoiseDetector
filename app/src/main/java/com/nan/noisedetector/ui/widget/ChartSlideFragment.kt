@@ -48,14 +48,6 @@ class ChartSlideFragment : Fragment() {
     }
 
     private fun initChart() {
-        val entries = ArrayList<Entry>()
-//        for (data in dataObjects) { // turn your data into Entry objects
-//            entries.add(MutableMap.MutableEntry<Any?, Any?>(data.getValueX(), data.getValueY()))
-//        }
-        entries.add(Entry(1.1F,2F))
-        entries.add(Entry(1.2F,2.8F))
-        entries.add(Entry(1.8F,2.5F))
-        entries.add(Entry(1.9F,2.9F))
         val dataSet = LineDataSet(entries, "Label")
         dataSet.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
         dataSet.color = mContext.getColor(R.color.pale_green)
@@ -70,7 +62,8 @@ class ChartSlideFragment : Fragment() {
         chart.description.text = ""
         chart.legend.isEnabled = false
         chart.axisRight.isEnabled = false
-        chart.axisLeft.resetAxisMinimum()
+        chart.axisLeft.axisMinimum = 40f
+//        chart.axisLeft.resetAxisMinimum()
 //        chart.axisLeft.valueFormatter = object : ValueFormatter() {
 //            override fun getFormattedValue(value: Float, axis: AxisBase?): String {
 //                return String.format("%.2f $",value)

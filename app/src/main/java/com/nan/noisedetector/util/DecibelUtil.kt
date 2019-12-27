@@ -8,7 +8,7 @@ object DecibelUtil {
     }
 
     fun setDbCount(dbValue: Float) {
-        dbCount += (dbValue - dbCount) * 0.4f //防止声音变化太快
+        dbCount += (dbValue - dbCount) //防止声音变化太快
     }
 
     fun clear() {

@@ -34,7 +34,7 @@ class ChartActivity : AppCompatActivity() {
     inner class ChartSlidePagerAdapter constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
         override fun getItem(position: Int): Fragment {
-            return ChartSlideFragment.newInstance(ArrayList())
+            return ChartSlideFragment.newInstance(data[position].entries)
         }
 
         override fun getCount(): Int {

@@ -1,7 +1,5 @@
 package com.nan.noisedetector.bean
 
-import java.io.Serializable
-
 /**
  * Created by nan on 2019-12-19.
  */
