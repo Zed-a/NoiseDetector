@@ -20,9 +20,8 @@ import com.nan.noisedetector.R
 import com.nan.noisedetector.bean.DataBean
 import com.nan.noisedetector.util.PreferenceHelper.historyRecord
 
-class HistoryListAdapter(private var mData: ArrayList<DataBean>, private val context: Context,
-                         private val itemClick: (Int) -> Unit) :
-        RecyclerView.Adapter<HistoryListAdapter.ViewHolder>() {
+class HistoryListAdapter(private var mData: ArrayList<DataBean>, private val context: Context, private val itemClick: (Int) -> Unit)
+    : RecyclerView.Adapter<HistoryListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_history, parent, false))

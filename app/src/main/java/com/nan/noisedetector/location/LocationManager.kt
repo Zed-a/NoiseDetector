@@ -5,7 +5,7 @@ import com.baidu.location.BDAbstractLocationListener
 import com.baidu.location.BDLocation
 import com.baidu.location.LocationClient
 import com.baidu.location.LocationClientOption
-import com.nan.noisedetector.util.logd
+import com.nan.noisedetector.util.logD
 
 object LocationManager {
     private lateinit var mLocationClient: LocationClient
@@ -15,7 +15,7 @@ object LocationManager {
      * 获取当前位置信息
      */
     fun init(context: Context) {
-        logd(TAG, "init")
+        logD(TAG, "init")
         mLocationClient = LocationClient(context)
     }
 
@@ -25,7 +25,7 @@ object LocationManager {
     }
 
     private fun requestLocation() {
-        logd(TAG, "requestLocation")
+        logD(TAG, "requestLocation")
         val option = LocationClientOption()
         option.setIsNeedAddress(true)
         option.locationMode = LocationClientOption.LocationMode.Hight_Accuracy
@@ -36,7 +36,7 @@ object LocationManager {
 
     private class MyLocationListener internal constructor(var callback: LocationCallback) : BDAbstractLocationListener() {
         override fun onReceiveLocation(location: BDLocation) {
-            logd(TAG, "onReceiveLocation")
+            logD(TAG, "onReceiveLocation")
             if (location.locType == BDLocation.TypeGpsLocation || location.locType == BDLocation.TypeNetWorkLocation)
                 callback.action(location)
         }

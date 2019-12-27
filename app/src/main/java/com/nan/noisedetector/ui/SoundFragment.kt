@@ -97,7 +97,6 @@ class SoundFragment : BaseFragment() {
     }
 
     private fun initView() {
-        //        mSoundDiscView = findViewById(R.id.soundDiscView);
         btn_start_detect.setOnClickListener {
             startRecord()
             btn_start_detect.isEnabled = false
@@ -118,7 +117,7 @@ class SoundFragment : BaseFragment() {
                             "street=${street} number=${streetNumber}")
                     mLocation = street+streetNumber
                     tv_location.text = mLocation
-                    logd(TAG, "getLocation mLocation=$mLocation")
+                    logD(TAG, "getLocation mLocation=$mLocation")
                 }
             }
         })
@@ -208,7 +207,7 @@ class SoundFragment : BaseFragment() {
     }
 
     private fun stopRecord() {
-        logd(TAG, "stopRecorder mLocation=$mLocation")
+        logD(TAG, "stopRecorder mLocation=$mLocation")
         endTime = getTime()
         val list = historyRecord
         if (count>5) {
