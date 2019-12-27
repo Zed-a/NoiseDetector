@@ -40,7 +40,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.ChartActivity" />
+        <activity android:name=".ui.ChartActivity"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>

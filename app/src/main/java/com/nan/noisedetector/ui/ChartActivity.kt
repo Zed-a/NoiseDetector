@@ -1,9 +1,9 @@
 package com.nan.noisedetector.ui
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import com.nan.noisedetector.R
 import com.nan.noisedetector.ui.widget.ChartSlideFragment
@@ -25,20 +25,51 @@ class ChartActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+        btn_last_page.setOnClickListener {
+            view_pager.currentItem = view_pager.currentItem - 1
+        }
+        btn_next_page.setOnClickListener {
+            view_pager.currentItem = view_pager.currentItem + 1
+        }
+
         view_pager.adapter = ChartSlidePagerAdapter(supportFragmentManager)
-        view_pager.currentItem = intent.getIntExtra(POSITION, 0)
+        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(p0: Int) {}
+            override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {}
+
+            override fun onPageSelected(p0: Int) {
+                setSlideBtnEnable(p0)
+            }
+        })
         view_pager.offscreenPageLimit = 4
+
+        with(intent.getIntExtra(POSITION, 0)) {
+            view_pager.currentItem = this
+            setSlideBtnEnable(this)
+        }
     }
 
+    fun setSlideBtnEnable(position :Int) {
+        when (position) {
+            0 -> {
+                btn_last_page.isEnabled = false
+                btn_next_page.isEnabled = true
+            }
+            data.size -1 -> {
+                btn_last_page.isEnabled = true
+                btn_next_page.isEnabled = false
+            }
+            else -> {
+                btn_last_page.isEnabled = true
+                btn_next_page.isEnabled = true
+            }
+        }
+    }
 
     inner class ChartSlidePagerAdapter constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
-        override fun getItem(position: Int): Fragment {
-            return ChartSlideFragment.newInstance(data[position].entries)
-        }
+        override fun getItem(position: Int) = ChartSlideFragment.newInstance(data[position].entries, data[position].historyData)
 
-        override fun getCount(): Int {
-            return data.size
-        }
+        override fun getCount() = data.size
     }
 }

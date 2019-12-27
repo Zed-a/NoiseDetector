@@ -36,17 +36,11 @@ class MainActivity : AppCompatActivity() {
 
     internal class NoiseFragmentPagerAdapter(fm: FragmentManager?, private val fragmentList: List<Fragment>,
                                              private val titleList: List<String>) : FragmentPagerAdapter(fm) {
-        override fun getItem(position: Int): Fragment {
-            return fragmentList[position]
-        }
+        override fun getItem(position: Int) = fragmentList[position]
 
-        override fun getCount(): Int {
-            return fragmentList.size
-        }
+        override fun getCount() = fragmentList.size
 
-        override fun getPageTitle(position: Int): CharSequence? {
-            return titleList[position]
-        }
+        override fun getPageTitle(position: Int) = titleList[position]
     }
 }
 

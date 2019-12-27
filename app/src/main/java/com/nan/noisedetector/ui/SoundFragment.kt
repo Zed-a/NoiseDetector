@@ -104,7 +104,7 @@ class SoundFragment : BaseFragment() {
             btn_start_detect.isEnabled = false
             btn_stop_detect.isEnabled = true
         }
-        btn_stop_detect.setOnClickListener{
+        btn_stop_detect.setOnClickListener {
             stopRecord()
             btn_start_detect.isEnabled = true
             btn_stop_detect.isEnabled = false
@@ -117,13 +117,6 @@ class SoundFragment : BaseFragment() {
                 with(location) {
                     Log.d(TAG, "latitude=${latitude} longitude=${longitude} " +
                             "street=${street} number=${streetNumber}")
-                    when {
-                        poiList == null || poiList.size == 0 ->
-                            Log.d(TAG, "poiList is null or empty")
-                        else ->
-                            for (poi: Poi in poiList)
-                                Log.d(TAG, "poiList=${poi.name} ${poi.addr}")
-                    }
                     mLocation = street+streetNumber
                     tv_location.text = mLocation
                     logd(TAG, "getLocation mLocation=$mLocation")
@@ -150,14 +143,15 @@ class SoundFragment : BaseFragment() {
             if (volume > 0 && volume < 1000000) {
                 setDbCount(20 * log10(volume.toDouble()).toFloat()) //将声压值转为分贝值并平滑处理
                 //mSoundDiscView.refresh();
-                with(getDbCount().toInt()) {
+                with(getDbCount()) {
                     //showNotification(dbCount);
-                    maxDecibel = if (this > maxDecibel) this else maxDecibel
-                    minDecibel = if (this in 1 until minDecibel) this else minDecibel
-                    totalDecibel += this
-                    entries.add(Entry(count.toFloat()/2, this.toFloat()))
+                    val intCount = this.toInt()
+                    maxDecibel = if (intCount > maxDecibel) intCount else maxDecibel
+                    minDecibel = if (intCount in 1 until minDecibel) intCount else minDecibel
+                    totalDecibel += intCount
+                    entries.add(Entry(count.toFloat()/2, this))
                     count++
-                    soundDiscView.text = this.toString()
+                    soundDiscView.text = intCount.toString()
                 }
 
             }
