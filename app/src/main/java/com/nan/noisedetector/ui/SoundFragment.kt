@@ -3,14 +3,17 @@ package com.nan.noisedetector.ui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ActivityManager
+import android.app.AlertDialog
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -48,6 +51,7 @@ class SoundFragment : BaseFragment() {
     private var totalDecibel = 0L
     private var count = 0
     private var mLocation = ""
+    private var hasRequestLocation = false
 
     private var entries = ArrayList<Entry>()
 
@@ -56,11 +60,7 @@ class SoundFragment : BaseFragment() {
                 Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_WIFI_STATE,
-                Manifest.permission.ACCESS_NETWORK_STATE,
-                Manifest.permission.CHANGE_WIFI_STATE,
-                Manifest.permission.INTERNET
+                Manifest.permission.ACCESS_FINE_LOCATION
         )
         private const val GET_PERMISSION = 1
         private const val MSG_WHAT = 0x1001
@@ -98,9 +98,17 @@ class SoundFragment : BaseFragment() {
 
     private fun initView() {
         btn_start_detect.setOnClickListener {
-            startRecord()
-            btn_start_detect.isEnabled = false
-            btn_stop_detect.isEnabled = true
+            if (checkPermissions()) {
+                if (!hasRequestLocation) {
+                    LocationManager.init(activity)
+                    getLocation()
+                }
+                startRecord()
+                btn_start_detect.isEnabled = false
+                btn_stop_detect.isEnabled = true
+            } else {
+                showWaringDialog()
+            }
         }
         btn_stop_detect.setOnClickListener {
             stopRecord()
@@ -110,7 +118,7 @@ class SoundFragment : BaseFragment() {
     }
 
     private fun getLocation() {
-        LocationManager.getLocation(object : LocationCallback {
+        if(LocationManager.getLocation(object : LocationCallback {
             override fun action(location: BDLocation) {
                 with(location) {
                     Log.d(TAG, "latitude=${latitude} longitude=${longitude} " +
@@ -120,10 +128,26 @@ class SoundFragment : BaseFragment() {
                     logD(TAG, "getLocation mLocation=$mLocation")
                 }
             }
-        })
+        })) hasRequestLocation = true
     }
 
     private fun verifyPermissions() = ActivityCompat.requestPermissions(activity, PERMISSIONS, GET_PERMISSION)
+
+    private fun checkPermissions(): Boolean {
+        for (permission: String in PERMISSIONS) {
+            logD(TAG, "permission=$permission")
+            if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED)
+                return false
+        }
+        return true
+    }
+
+    private fun showWaringDialog() {
+        AlertDialog.Builder(activity)
+                .setTitle("警告！")
+                .setMessage("请前往设置中打开相关权限(定位、录音、读取存储)，否则功能无法正常运行！")
+                .show()
+    }
 
     override fun onResume() {
         super.onResume()

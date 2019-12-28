@@ -8,7 +8,7 @@ import com.baidu.location.LocationClientOption
 import com.nan.noisedetector.util.logD
 
 object LocationManager {
-    private lateinit var mLocationClient: LocationClient
+    private var mLocationClient: LocationClient? = null
     private const val TAG = "LocationManager"
 
     /**
@@ -16,12 +16,14 @@ object LocationManager {
      */
     fun init(context: Context) {
         logD(TAG, "init")
-        mLocationClient = LocationClient(context)
+        if (mLocationClient == null) mLocationClient = LocationClient(context)
     }
 
-    fun getLocation(callback: LocationCallback) {
-        mLocationClient.registerLocationListener(MyLocationListener(callback))
+    fun getLocation(callback: LocationCallback): Boolean {
+        if (mLocationClient == null) return false
+        mLocationClient!!.registerLocationListener(MyLocationListener(callback))
         requestLocation()
+        return true
     }
 
     private fun requestLocation() {
@@ -30,8 +32,8 @@ object LocationManager {
         option.setIsNeedAddress(true)
         option.locationMode = LocationClientOption.LocationMode.Hight_Accuracy
         option.setScanSpan(5000)
-        mLocationClient.locOption = option
-        mLocationClient.start()
+        mLocationClient!!.locOption = option
+        mLocationClient!!.start()
     }
 
     private class MyLocationListener internal constructor(var callback: LocationCallback) : BDAbstractLocationListener() {
