@@ -77,13 +77,6 @@ class ChartSlideFragment : Fragment() {
         chart.description.text = ""
         chart.legend.isEnabled = false
         chart.axisRight.isEnabled = false
-//        chart.axisLeft.axisMinimum = 0f
-//        chart.axisLeft.resetAxisMinimum()
-//        chart.axisLeft.valueFormatter = object : ValueFormatter() {
-//            override fun getFormattedValue(value: Float, axis: AxisBase?): String {
-//                return String.format("%.2f $",value)
-//            }
-//        }
         chart.invalidate()
     }
 }

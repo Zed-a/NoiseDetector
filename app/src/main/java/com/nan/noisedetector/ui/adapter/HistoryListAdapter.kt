@@ -1,7 +1,8 @@
 package com.nan.noisedetector.ui.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
+import android.app.Activity
+import android.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -18,9 +19,12 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import com.nan.noisedetector.R
 import com.nan.noisedetector.bean.DataBean
+import com.nan.noisedetector.bean.HistoryData
 import com.nan.noisedetector.util.PreferenceHelper.historyRecord
+import com.nan.noisedetector.util.isEmpty
 
-class HistoryListAdapter(private var mData: ArrayList<DataBean>, private val context: Context, private val itemClick: (Int) -> Unit)
+class HistoryListAdapter(private var mData: ArrayList<DataBean>, private val context: Activity,
+                         private val itemClick: (Int) -> Unit, private val showDialog: (Int, Int, String) -> Unit)
     : RecyclerView.Adapter<HistoryListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,7 +44,14 @@ class HistoryListAdapter(private var mData: ArrayList<DataBean>, private val con
             }
             holder.item.setOnClickListener {}
             holder.deleteView.setOnClickListener { delete(position) }
+            holder.editView.setOnClickListener { showEditDialog(position, this) }
             holder.mainItem.setOnClickListener { itemClick(position) }
+            if (isEmpty(msg))
+                holder.msgView.visibility = View.GONE
+            else {
+                holder.msgView.visibility = View.VISIBLE
+                holder.msgView.text = "备注：$msg"
+            }
 
             var spanString = SpannableStringBuilder("最大分贝 $max")
             spanString.setSpan(ForegroundColorSpan(context.getColor(R.color.colorPrimary)), 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -60,10 +71,12 @@ class HistoryListAdapter(private var mData: ArrayList<DataBean>, private val con
         val item = view
         val mainItem: LinearLayout = view.findViewById(R.id.main_item)
         val deleteView: Button = view.findViewById(R.id.delete)
+        val editView: Button = view.findViewById(R.id.btn_edit)
         val time: TextView = view.findViewById(R.id.tv_time)
         val position: TextView = view.findViewById(R.id.tv_position)
         val maxDecibel: TextView = view.findViewById(R.id.tv_max_decibel)
         val averageDecibel: TextView = view.findViewById(R.id.tv_average_decibel)
+        val msgView: TextView = view.findViewById(R.id.tv_msg)
     }
 
     fun refresh() {
@@ -75,5 +88,16 @@ class HistoryListAdapter(private var mData: ArrayList<DataBean>, private val con
         mData.removeAt(position)
         historyRecord = mData
         notifyDataSetChanged()
+    }
+
+    private fun showEditDialog(position: Int, historyData: HistoryData) {
+        notifyDataSetChanged()
+        val items: Array<String> = arrayOf("编辑地点", "编辑备注")
+        AlertDialog.Builder(context,0)
+                .setItems(items) { dialog, which ->
+                    dialog.dismiss()
+                    val text = if (which == 0) historyData.location else historyData.msg
+                    showDialog(which, position, text) }
+                .show()
     }
 }

@@ -115,7 +115,7 @@ class SoundFragment : BaseFragment() {
                 with(location) {
                     Log.d(TAG, "latitude=${latitude} longitude=${longitude} " +
                             "street=${street} number=${streetNumber}")
-                    mLocation = street+streetNumber
+                    mLocation = "$city   $street$streetNumber"
                     tv_location.text = mLocation
                     logD(TAG, "getLocation mLocation=$mLocation")
                 }
@@ -216,7 +216,7 @@ class SoundFragment : BaseFragment() {
                     "$startTime-$endTime",
                     maxDecibel,
                     (totalDecibel / count).toInt(),
-                    if (isEmpty(mLocation)) "定位失败" else mLocation)
+                    if (isEmpty(mLocation)) "定位失败" else mLocation, "")
                     , entries))
             historyRecord = list
             Log.d(TAG, "post event")

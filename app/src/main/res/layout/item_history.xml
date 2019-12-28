@@ -27,7 +27,8 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:singleLine="true"
-                android:ellipsize="end"/>
+                android:ellipsize="end"
+                android:text="position"/>
 
             <TextView
                 android:id="@+id/tv_time"
@@ -35,7 +36,18 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                 android:singleLine="true"
-                android:ellipsize="end"/>
+                android:ellipsize="end"
+                android:text="time"/>
+
+            <TextView
+                android:id="@+id/tv_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:text="备注"
+                android:textColor="#EE0000"/>
 
         </LinearLayout>
 
@@ -50,14 +62,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:text="tv_max_decibel"/>
 
             <TextView
                 android:id="@+id/tv_average_decibel"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:gravity="center_vertical"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:text="tv_average_decibel"/>
 
         </LinearLayout>
 
@@ -66,6 +80,16 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btn_edit"
+            android:text="@string/edit"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:background="#CFCFCF"
+            android:layout_width="100dp"
+            android:layout_height="match_parent" />
+
         <Button
             android:id="@+id/delete"
             android:text="@string/delete"
