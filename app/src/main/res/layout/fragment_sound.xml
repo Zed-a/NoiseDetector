@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_location"
@@ -14,32 +15,34 @@
         android:textSize="14sp"
         android:textColor="@color/colorPrimary"/>
 
-    <TextView
-        android:id="@+id/soundDiscView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/_0"
-        android:textSize="70sp"
-        android:layout_marginTop="200dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="100dp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/db"
-        android:layout_toEndOf="@+id/soundDiscView"
-        android:layout_alignBottom="@+id/soundDiscView"
-        android:layout_marginBottom="15dp"
-        android:layout_marginStart="10dp"
-        android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/soundDiscView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_0"
+            android:textSize="70sp"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/db"
+            android:layout_toEndOf="@+id/soundDiscView"
+            android:layout_alignBottom="@+id/soundDiscView"
+            android:layout_marginBottom="15dp"
+            android:layout_marginStart="10dp"
+            android:textSize="18sp"/>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btn_start_detect"
         android:layout_height="wrap_content"
         style="@style/HoloNewBtnStyle"
-        android:layout_above="@+id/btn_stop_detect"
-        android:layout_centerHorizontal="true"
         android:text="@string/start_record"/>
 
     <Button
@@ -47,10 +50,8 @@
         android:layout_height="wrap_content"
         style="@style/HoloNewBtnStyle"
         android:layout_marginTop="30dp"
-        android:layout_centerHorizontal="true"
         android:text="@string/stop_detect"
         android:enabled="false"
-        android:layout_alignParentBottom="true"
         android:layout_marginBottom="30dp"/>
 
-</RelativeLayout>
+</LinearLayout>
