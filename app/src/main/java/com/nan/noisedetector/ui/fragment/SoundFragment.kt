@@ -13,13 +13,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.baidu.location.BDLocation
 import com.github.mikephil.charting.data.Entry
 import com.nan.noisedetector.R
 import com.nan.noisedetector.bean.DataBean
 import com.nan.noisedetector.bean.HistoryData
 import com.nan.noisedetector.event.MessageEvent
-import com.nan.noisedetector.location.LocationCallback
 import com.nan.noisedetector.location.LocationManager
 import com.nan.noisedetector.recorder.NoiseMediaRecorder
 import com.nan.noisedetector.ui.base.BaseFragment
@@ -103,8 +101,7 @@ class SoundFragment : BaseFragment() {
     }
 
     private fun getLocation() {
-        if(LocationManager.getLocation(object : LocationCallback {
-            override fun action(location: BDLocation) {
+        if(LocationManager.getLocation { location ->
                 with(location) {
                     Log.d(TAG, "latitude=${latitude} longitude=${longitude} " +
                             "street=${street} number=${streetNumber}")
@@ -112,8 +109,7 @@ class SoundFragment : BaseFragment() {
                     tv_location.text = mLocation
                     logD(TAG, "getLocation mLocation=$mLocation")
                 }
-            }
-        })) hasRequestLocation = true
+        }) hasRequestLocation = true
     }
 
     private fun verifyPermissions() = ActivityCompat.requestPermissions(activity, ALL_PERMISSIONS, GET_PERMISSION)

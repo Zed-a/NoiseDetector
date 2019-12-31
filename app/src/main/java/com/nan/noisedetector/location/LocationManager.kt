@@ -19,7 +19,7 @@ object LocationManager {
         if (mLocationClient == null) mLocationClient = LocationClient(context)
     }
 
-    fun getLocation(callback: LocationCallback): Boolean {
+    fun getLocation(callback: (BDLocation) -> Unit): Boolean {
         if (mLocationClient == null) return false
         mLocationClient!!.registerLocationListener(MyLocationListener(callback))
         requestLocation()
@@ -36,15 +36,11 @@ object LocationManager {
         mLocationClient!!.start()
     }
 
-    private class MyLocationListener internal constructor(var callback: LocationCallback) : BDAbstractLocationListener() {
+    private class MyLocationListener internal constructor(var callback: (BDLocation) -> Unit) : BDAbstractLocationListener() {
         override fun onReceiveLocation(location: BDLocation) {
             logD(TAG, "onReceiveLocation")
             if (location.locType == BDLocation.TypeGpsLocation || location.locType == BDLocation.TypeNetWorkLocation)
-                callback.action(location)
+                callback(location)
         }
     }
-}
-
-interface LocationCallback {
-    fun action(location: BDLocation)
 }
