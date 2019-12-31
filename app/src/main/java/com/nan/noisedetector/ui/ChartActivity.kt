@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import com.nan.noisedetector.R
-import com.nan.noisedetector.ui.widget.ChartSlideFragment
+import com.nan.noisedetector.ui.fragment.ChartSlideFragment
 import com.nan.noisedetector.util.PreferenceHelper
 import kotlinx.android.synthetic.main.activity_chart.*
 

@@ -1,4 +1,4 @@
-package com.nan.noisedetector.ui
+package com.nan.noisedetector.ui.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -10,9 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.nan.noisedetector.R
 import com.nan.noisedetector.event.MessageEvent
+import com.nan.noisedetector.ui.ChartActivity
 import com.nan.noisedetector.ui.adapter.HistoryListAdapter
 import com.nan.noisedetector.ui.base.BaseFragment
-import com.nan.noisedetector.ui.widget.RenameDialogFragment
 import com.nan.noisedetector.ui.widget.SwipeItemLayout.OnSwipeItemTouchListener
 import com.nan.noisedetector.util.PreferenceHelper
 import kotlinx.android.synthetic.main.fragment_history.*

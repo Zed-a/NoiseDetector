@@ -1,4 +1,4 @@
-package com.nan.noisedetector.ui
+package com.nan.noisedetector.ui.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint

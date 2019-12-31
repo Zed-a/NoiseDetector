@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.app.AppCompatActivity
 import com.nan.noisedetector.R
+import com.nan.noisedetector.ui.fragment.HistoryFragment
+import com.nan.noisedetector.ui.fragment.SoundFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
