@@ -6,10 +6,6 @@ import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import android.view.MotionEvent
 
-/**
- * @author nan_xu
- * @date 2019/12/27
- */
 class NoScrollViewPager : ViewPager {
     constructor(context: Context?, attrs: AttributeSet?) : super(context!!, attrs)
     constructor(context: Context?) : super(context!!)

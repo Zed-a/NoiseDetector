@@ -2,13 +2,8 @@ package com.nan.noisedetector.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.ActivityManager
 import android.app.AlertDialog
-import android.app.Notification
-import android.app.NotificationManager
-import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -33,7 +28,6 @@ import com.nan.noisedetector.util.DecibelUtil.clear
 import com.nan.noisedetector.util.DecibelUtil.getDbCount
 import com.nan.noisedetector.util.DecibelUtil.setDbCount
 import com.nan.noisedetector.util.PreferenceHelper.historyRecord
-import com.nan.noisedetector.util.PreferenceHelper.isOpenNotify
 import com.nan.noisedetector.util.PreferenceHelper.threshold
 import kotlinx.android.synthetic.main.fragment_sound.*
 import org.greenrobot.eventbus.EventBus
@@ -56,31 +50,22 @@ class SoundFragment : BaseFragment() {
     private var entries = ArrayList<Entry>()
 
     companion object {
-        private val PERMISSIONS = arrayOf(
+        private val ALL_PERMISSIONS = arrayOf(
                 Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION
         )
+
+        private val NECESSARY_PERMISSIONS = arrayOf(
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+
         private const val GET_PERMISSION = 1
         private const val MSG_WHAT = 0x1001
         private const val REFRESH_TIME = 500
 
-        fun isAppAlive(context: Context, packageName: String): Int {
-            val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-            val listInfos = activityManager.getRunningTasks(20)
-            // 判断程序是否在栈顶
-            return if (listInfos[0].topActivity.packageName == packageName) {
-                1
-            } else { // 判断程序是否在栈里
-                for (info in listInfos) {
-                    if (info.topActivity.packageName == packageName) {
-                        return 2
-                    }
-                }
-                0 // 栈里找不到，返回3
-            }
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -131,10 +116,10 @@ class SoundFragment : BaseFragment() {
         })) hasRequestLocation = true
     }
 
-    private fun verifyPermissions() = ActivityCompat.requestPermissions(activity, PERMISSIONS, GET_PERMISSION)
+    private fun verifyPermissions() = ActivityCompat.requestPermissions(activity, ALL_PERMISSIONS, GET_PERMISSION)
 
     private fun checkPermissions(): Boolean {
-        for (permission: String in PERMISSIONS) {
+        for (permission: String in NECESSARY_PERMISSIONS) {
             logD(TAG, "permission=$permission")
             if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED)
                 return false
@@ -145,7 +130,7 @@ class SoundFragment : BaseFragment() {
     private fun showWaringDialog() {
         AlertDialog.Builder(activity)
                 .setTitle("警告！")
-                .setMessage("请前往设置中打开相关权限(定位、录音、读取存储)，否则功能无法正常运行！")
+                .setMessage("请前往设置中打开相关权限(录音、读取存储)，否则功能无法正常运行！")
                 .show()
     }
 
@@ -179,23 +164,6 @@ class SoundFragment : BaseFragment() {
             }
             sendEmptyMessageDelayed(MSG_WHAT, REFRESH_TIME.toLong())
         }
-    }
-
-    private fun showNotification(dbCount: Float) {
-        if (isOpenNotify && dbCount < mThreshold) {
-            return
-        }
-        val builder = Notification.Builder(activity)
-//        var intent: Intent
-        //        PendingIntent pendingIntent = PendingIntent.getActivity(SoundActivity.this,0,intent,0);  //点击跳转
-        builder.setSmallIcon(R.mipmap.ic_launcher) //小图标，在大图标右下角
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)) //大图标，没有设置时小图标就是大图标
-//            .setContentIntent(pendingIntent)
-                .setAutoCancel(true) //点击的时候消失
-                .setContentTitle("噪音超限")
-                .setContentText("当前噪音分贝为$dbCount,大于阈值$mThreshold")
-        val manager = activity.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        manager.notify(1, builder.build())
     }
 
     /**

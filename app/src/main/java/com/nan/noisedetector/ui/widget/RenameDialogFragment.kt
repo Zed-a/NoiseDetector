@@ -1,8 +1,5 @@
 package com.nan.noisedetector.ui.widget
 
-/**
- * Created by nan on 2019-12-28.
- */
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
