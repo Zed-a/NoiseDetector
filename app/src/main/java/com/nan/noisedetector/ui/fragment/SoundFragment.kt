@@ -198,8 +198,8 @@ class SoundFragment : BaseFragment() {
         logD(TAG, "stopRecorder mLocation=$mLocation")
         endTime = getTime()
         val list = historyRecord
-        if (count>5) {
-            list.add(DataBean(HistoryData(
+        if (count>2) {
+            list.add(0, DataBean(HistoryData(
                     getDate(),
                     "$startTime-$endTime",
                     maxDecibel,

@@ -17,7 +17,7 @@ class NoiseMediaRecorder {
                 0F
             }
         } else {
-            5F
+            0F
         }
 
     fun setMyRecAudioFile(myRecAudioFile: File?) {

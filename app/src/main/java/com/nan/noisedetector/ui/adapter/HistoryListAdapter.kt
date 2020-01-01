@@ -17,6 +17,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.nan.noisedetector.R
 import com.nan.noisedetector.bean.DataBean
 import com.nan.noisedetector.bean.HistoryData
@@ -43,14 +44,14 @@ class HistoryListAdapter(private var mData: ArrayList<DataBean>, private val con
                 } else false
             }
             holder.item.setOnClickListener {}
-            holder.deleteView.setOnClickListener { delete(position) }
+            holder.deleteView.setOnClickListener { showDeleteDialog(position) }
             holder.editView.setOnClickListener { showEditDialog(position, this) }
             holder.mainItem.setOnClickListener { itemClick(position) }
             if (isEmpty(msg))
                 holder.msgView.visibility = View.GONE
             else {
                 holder.msgView.visibility = View.VISIBLE
-                holder.msgView.text = "备注：$msg"
+                holder.msgView.text = "备注:$msg"
             }
 
             var spanString = SpannableStringBuilder("最大分贝 $max")
@@ -77,6 +78,18 @@ class HistoryListAdapter(private var mData: ArrayList<DataBean>, private val con
         val maxDecibel: TextView = view.findViewById(R.id.tv_max_decibel)
         val averageDecibel: TextView = view.findViewById(R.id.tv_average_decibel)
         val msgView: TextView = view.findViewById(R.id.tv_msg)
+    }
+
+    private fun showDeleteDialog(position: Int) {
+        SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Are you sure?")
+                .setContentText("Won't be able to recover this file!")
+                .setConfirmText("Yes,delete it!")
+                .setConfirmClickListener {
+                        it.dismissWithAnimation()
+                        delete(position)
+                }
+                .show()
     }
 
     fun refresh() {

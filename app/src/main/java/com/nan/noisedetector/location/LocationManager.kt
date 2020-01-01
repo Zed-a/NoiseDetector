@@ -11,9 +11,6 @@ object LocationManager {
     private var mLocationClient: LocationClient? = null
     private const val TAG = "LocationManager"
 
-    /**
-     * 获取当前位置信息
-     */
     fun init(context: Context) {
         logD(TAG, "init")
         if (mLocationClient == null) mLocationClient = LocationClient(context)
@@ -36,7 +33,7 @@ object LocationManager {
         mLocationClient!!.start()
     }
 
-    private class MyLocationListener internal constructor(var callback: (BDLocation) -> Unit) : BDAbstractLocationListener() {
+    private class MyLocationListener (var callback: (BDLocation) -> Unit) : BDAbstractLocationListener() {
         override fun onReceiveLocation(location: BDLocation) {
             logD(TAG, "onReceiveLocation")
             if (location.locType == BDLocation.TypeGpsLocation || location.locType == BDLocation.TypeNetWorkLocation)
